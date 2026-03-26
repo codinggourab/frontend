@@ -634,8 +634,16 @@ export default function App() {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/events`);
-      const data = await res.json();
+     const res = await fetch(`${API_URL}/api/events`);
+
+const text = await res.text();
+
+if (!res.ok) {
+  console.error("Server Error:", text);
+  throw new Error("API failed");
+}
+
+const data = JSON.parse(text);
       setEvents(data);
     } catch (err) {
       console.error('Failed to fetch events:', err);
