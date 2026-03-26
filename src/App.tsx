@@ -2,7 +2,10 @@ import { useState, useEffect, FormEvent, Dispatch, SetStateAction } from 'react'
 import { io } from 'socket.io-client';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 const API_URL = "https://backend-zdko.onrender.com";
-const socket = io(API_URL);
+
+const socket = io("https://backend-zdko.onrender.com", {
+  transports: ["websocket"],
+});
 
 import { 
   Bell, 
