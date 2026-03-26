@@ -1,4 +1,4 @@
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useRef, ChangeEvent, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ArrowLeft, 
@@ -59,40 +59,51 @@ export default function CreateEvent({ onClose, onPublish, userName }: CreateEven
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
-  const handlePublish = async () => {
-    const newEvent: Event = {
-      ...formData as Event,
-      id: Math.random().toString(36).slice(2, 11),
-      organizerId: 'current-user', // In a real app, this would be the logged-in user's ID
-      organizerName: userName || 'Event Organizer',
-      registrationCount: 0,
-      status: 'upcoming',
-      date: formData.details?.timeline?.eventBegins || new Date().toLocaleDateString(),
-      time: '10:00 AM', // Simplified for now
-    };
+  const [loading, setLoading] = useState(false);
 
-    try {
-      const res = await fetch(`${API_URL}/api/events`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(newEvent)
-      });
+const handlePublish = async (e?: FormEvent) => {
+  e?.preventDefault(); // 🔥 prevents double submit
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data?.msg || 'Failed to publish event');
-      }
+  if (loading) return; // 🔥 prevents double clicks
+  setLoading(true);
 
-      onPublish((data?.event || data) as Event);
-    } catch (error) {
-      console.error('Publish event failed:', error);
-      onPublish(newEvent);
-    }
+  const newEvent: Event = {
+    ...formData as Event,
+    id: Math.random().toString(36).slice(2, 11),
+    organizerId: 'current-user',
+    organizerName: userName || 'Event Organizer',
+    registrationCount: 0,
+    status: 'upcoming',
+    date: formData.details?.timeline?.eventBegins || new Date().toISOString(), // ✅ better date format
+    time: '10:00 AM',
   };
 
+  try {
+    const res = await fetch(`${API_URL}/api/events`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(newEvent)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data?.error || 'Failed to publish event');
+    }
+
+    // ✅ ONLY use backend response
+    onPublish((data?.event || data) as Event);
+
+  } catch (error) {
+    console.error('❌ Publish event failed:', error);
+    // ❌ removed fake success (important)
+  } finally {
+    setLoading(false);
+  }
+};
   const updateFormData = (field: keyof Event, value: Event[keyof Event]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -574,7 +585,7 @@ export default function CreateEvent({ onClose, onPublish, userName }: CreateEven
                 </button>
               ) : (
                 <button 
-                  onClick={handlePublish}
+                  type="submit"
                   className="flex items-center gap-2 px-12 py-4 rounded-full bg-linear-to-r from-[#adc6ff] to-primary-container text-on-primary font-headline font-extrabold text-lg shadow-xl shadow-primary-container/20 hover:scale-105 active:scale-95 transition-all"
                 >
                   Publish Event
