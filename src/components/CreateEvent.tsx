@@ -15,7 +15,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { Event } from '../types';
-
+const API_URL = "https://backend-zdko.onrender.com";
 interface CreateEventProps {
   onClose: () => void;
   onPublish: (event: Event) => void;
@@ -72,7 +72,7 @@ export default function CreateEvent({ onClose, onPublish, userName }: CreateEven
     };
 
     try {
-      const res = await fetch('http://localhost:5000/api/events', {
+      const res = await fetch(`${API_URL}/api/events`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
