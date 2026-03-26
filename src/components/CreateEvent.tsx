@@ -161,7 +161,7 @@ const handlePublish = async (e?: FormEvent) => {
             >
               Save Draft
             </button>
-            {currentStep === 4 ? (
+            {/* {currentStep === 4 ? (
               <button 
                 onClick={handlePublish}
                 className="px-8 py-2 rounded-full bg-linear-to-r from-[#adc6ff] to-primary-container text-on-primary font-bold shadow-lg shadow-primary-container/20 hover:brightness-110 transition-all"
@@ -176,7 +176,7 @@ const handlePublish = async (e?: FormEvent) => {
                 Next Step
                 <ArrowRight size={18} />
               </button>
-            )}
+            )} */}
           </div>
         </div>
       </header>
@@ -585,12 +585,14 @@ const handlePublish = async (e?: FormEvent) => {
                 </button>
               ) : (
                 <button 
-                  type="submit"
-                  className="flex items-center gap-2 px-12 py-4 rounded-full bg-linear-to-r from-[#adc6ff] to-primary-container text-on-primary font-headline font-extrabold text-lg shadow-xl shadow-primary-container/20 hover:scale-105 active:scale-95 transition-all"
-                >
-                  Publish Event
-                  <ChevronRight size={24} />
-                </button>
+  type="button" // 🔥 important
+  onClick={handlePublish} // 🔥 THIS WAS MISSING
+  disabled={loading}
+  className="flex items-center gap-2 px-12 py-4 rounded-full bg-linear-to-r from-[#adc6ff] to-primary-container text-on-primary font-headline font-extrabold text-lg shadow-xl shadow-primary-container/20 hover:scale-105 active:scale-95 transition-all"
+>
+  {loading ? 'Publishing...' : 'Publish Event'}
+  <ChevronRight size={24} />
+</button>
               )}
             </div>
           </div>
