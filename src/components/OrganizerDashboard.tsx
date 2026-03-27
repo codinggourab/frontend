@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import ExploreSection from './ExploreSection';
 import EventDetails from './EventDetails';
@@ -27,6 +27,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { Event, Registration, Notification } from '../types';
+const API_URL = "https://backend-zdko.onrender.com";
 
 interface OrganizerDashboardProps {
   userName: string;
@@ -52,6 +53,21 @@ const OrganizerDashboard = ({
   const [currentView, setCurrentView] = useState<'dashboard' | 'explore' | 'eventDetails' | 'registrationList'>('dashboard');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [previousView, setPreviousView] = useState<'dashboard' | 'explore'>('dashboard');
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [localEvents, setLocalEvents] = useState<Event[]>(events);
+
+  // keep localEvents synced if props change
+  useEffect(() => {
+    setLocalEvents(events);
+  }, [events]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    setCurrentUserId(payload.id);
+  }, []);
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -74,6 +90,30 @@ const OrganizerDashboard = ({
     setSelectedEvent(event);
     setCurrentView('registrationList');
   };
+
+  
+const handleDelete = async (eventId: string) => {
+  if (!confirm("Delete this event?")) return;
+
+  try {
+    const res = await fetch(`${API_URL}/api/events/${eventId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    // ✅ update UI instantly
+    setLocalEvents(prev => prev.filter(e => e._id !== eventId));
+
+  } catch (err) {
+    console.error("Delete failed", err);
+  }
+};
+
 
   const handleDownloadList = (event: Event) => {
     const eventRegistrations = registrations.filter(r => r.eventId === event.id)
@@ -399,7 +439,7 @@ const OrganizerDashboard = ({
                   </div>
                   
                   <div className="space-y-4">
-                    {events.slice(0, 5).map((event, i) => (
+                    {localEvents.slice(0, 5).map((event, i) => (
                       <div key={i} className="flex items-center justify-between p-4 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-all group">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center overflow-hidden">
@@ -430,6 +470,18 @@ const OrganizerDashboard = ({
                             >
                               <Download size={18} />
                             </button>
+                            {event.organizerId === currentUserId && (
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      handleDelete(event._id);
+    }}
+    className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all"
+    title="Delete Event"
+  >
+    <Trash2 size={18} />
+  </button>
+)}
                           </div>
                         </div>
                       </div>
