@@ -656,13 +656,6 @@ export default function App() {
     console.error('Failed to fetch events:', err);
   }
 };
-useEffect(() => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    fetchEvents();
-    fetchRegistrations();
-  }
-}, []);
 
   const fetchRegistrations = async () => {
   try {
@@ -682,12 +675,6 @@ useEffect(() => {
   }
 };
 
-useEffect(() => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    fetchRegistrations();
-  }
-}, []);
 
 useEffect(() => {
   const token = localStorage.getItem('token');
@@ -707,6 +694,8 @@ useEffect(() => {
 
       if (res.ok) {
         setUserName(data.name);
+        await fetchEvents();
+        await fetchRegistrations();
 
         if (data.type === 'student') {
           setView('student-dashboard');
@@ -767,14 +756,19 @@ useEffect(() => {
   };
 
   const handleAuthSuccess = (role: 'student' | 'organizer', name: string) => {
-    closeAuth();
-    setUserName(name);
-    if (role === 'student') {
-      setView('student-dashboard');
-    } else {
-      setView('organizer-dashboard');
-    }
-  };
+  closeAuth();
+  setUserName(name);
+
+  // ✅ FETCH AFTER LOGIN
+  fetchEvents();
+  fetchRegistrations();
+
+  if (role === 'student') {
+    setView('student-dashboard');
+  } else {
+    setView('organizer-dashboard');
+  }
+};
 
   const handleLogout = () => {
   localStorage.removeItem('token'); // ✅ ADD THIS
