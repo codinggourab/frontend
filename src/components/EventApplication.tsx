@@ -288,7 +288,7 @@ const EventApplication: React.FC<EventApplicationProps> = ({ event, onBack, onSu
                       value={formData.department}
                       onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                     >
-                      <option>Computer Science</option>
+                      <option>Computer Application</option>
                       <option>Engineering</option>
                       <option>Design & Arts</option>
                       <option>Business & Finance</option>
@@ -304,13 +304,13 @@ const EventApplication: React.FC<EventApplicationProps> = ({ event, onBack, onSu
                   }}
                   className="flex flex-col gap-2"
                 >
-                  <label className="text-sm font-semibold text-on-surface ml-1">Current Stream / Year</label>
+                  <label className="text-sm font-semibold text-on-surface ml-1">Current Course, Year</label>
                   <div className="relative group">
                     <PlusCircle className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-[#adc6ff] transition-colors" size={20} />
                     <input 
                       required
                       className="w-full bg-surface-container-highest border-none rounded-2xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary-container transition-all outline-none" 
-                      placeholder="e.g. B.Tech 3rd Year" 
+                      placeholder="e.g. MCA, 2nd Year" 
                       type="text"
                       value={formData.year}
                       onChange={(e) => setFormData({ ...formData, year: e.target.value })}
@@ -332,7 +332,7 @@ const EventApplication: React.FC<EventApplicationProps> = ({ event, onBack, onSu
                     <input 
                       required
                       className="w-full bg-surface-container-highest border-none rounded-2xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary-container transition-all outline-none" 
-                      placeholder="Global Institute of Technology" 
+                      placeholder="Abc Institute of Technology" 
                       type="text"
                       value={formData.college}
                       onChange={(e) => setFormData({ ...formData, college: e.target.value })}
@@ -354,7 +354,7 @@ const EventApplication: React.FC<EventApplicationProps> = ({ event, onBack, onSu
                     <input 
                       required
                       className="w-full bg-surface-container-highest border-none rounded-2xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary-container transition-all outline-none" 
-                      placeholder="e.g. 123456789" 
+                      placeholder="e.g. 11571024039" 
                       type="text"
                       value={formData.roll}
                       onChange={(e) => setFormData({ ...formData, roll: e.target.value })}
@@ -481,7 +481,7 @@ const EventApplication: React.FC<EventApplicationProps> = ({ event, onBack, onSu
                       )}
                     </AnimatePresence>
                   </button>
-                  <p className="text-center text-xs text-on-surface-variant mt-4 uppercase tracking-[0.2em] font-bold">Applications close in 48 hours</p>
+                  <p className="text-center text-xs text-on-surface-variant mt-4 uppercase tracking-[0.2em] font-bold">Applications closes in 48 hours</p>
                 </motion.div>
               </motion.form>
             </div>
@@ -496,8 +496,8 @@ const EventApplication: React.FC<EventApplicationProps> = ({ event, onBack, onSu
           <span className="text-[10px] font-medium uppercase tracking-widest mt-1">Home</span>
         </div>
         <div className="flex flex-col items-center justify-center text-on-surface-variant p-3 active:bg-[#adc6ff]/10 transition-all cursor-pointer">
-          <PlusCircle size={20} />
-          <span className="text-[10px] font-medium uppercase tracking-widest mt-1">Create</span>
+          {/* <PlusCircle size={20} />
+          <span className="text-[10px] font-medium uppercase tracking-widest mt-1">Create</span> */}
         </div>
         <div className="flex flex-col items-center justify-center bg-[#adc6ff]/20 text-[#adc6ff] rounded-full p-3 scale-110">
           <FileText size={20} />
