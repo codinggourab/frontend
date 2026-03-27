@@ -632,24 +632,11 @@ export default function App() {
   // Global State
   const [events, setEvents] = useState<Event[]>([]);
 
-  const fetchEvents = async () => {
+ const fetchEvents = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const res = await fetch(`${API_URL}/api/events`); // ✅ NO HEADERS
 
-    const res = await fetch(`${API_URL}/api/events`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    const text = await res.text();
-
-    if (!res.ok) {
-      console.error("Server Error:", text);
-      throw new Error("API failed");
-    }
-
-    const data = JSON.parse(text);
+    const data = await res.json();
     setEvents(data);
 
   } catch (err) {
