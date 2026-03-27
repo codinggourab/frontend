@@ -633,38 +633,60 @@ export default function App() {
   const [events, setEvents] = useState<Event[]>([]);
 
   const fetchEvents = async () => {
-    try {
-     const res = await fetch(`${API_URL}/api/events`);
+  try {
+    const token = localStorage.getItem('token');
 
-const text = await res.text();
+    const res = await fetch(`${API_URL}/api/events`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
-if (!res.ok) {
-  console.error("Server Error:", text);
-  throw new Error("API failed");
-}
+    const text = await res.text();
 
-const data = JSON.parse(text);
-      setEvents(data);
-    } catch (err) {
-      console.error('Failed to fetch events:', err);
+    if (!res.ok) {
+      console.error("Server Error:", text);
+      throw new Error("API failed");
     }
-  };
+
+    const data = JSON.parse(text);
+    setEvents(data);
+
+  } catch (err) {
+    console.error('Failed to fetch events:', err);
+  }
+};
 useEffect(() => {
+  const token = localStorage.getItem('token');
+  if (token) {
     fetchEvents();
-  }, []);
+    fetchRegistrations();
+  }
+}, []);
 
   const fetchRegistrations = async () => {
   try {
-    const res = await fetch(`${API_URL}/api/registrations`);
+    const token = localStorage.getItem('token');
+
+    const res = await fetch(`${API_URL}/api/registrations`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
     const data = await res.json();
     setRegistrations(data);
+
   } catch (err) {
     console.error('Failed to fetch registrations:', err);
   }
 };
 
 useEffect(() => {
-  fetchRegistrations();
+  const token = localStorage.getItem('token');
+  if (token) {
+    fetchRegistrations();
+  }
 }, []);
 
 useEffect(() => {
