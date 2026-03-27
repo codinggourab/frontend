@@ -70,7 +70,7 @@ const handlePublish = async (e?: FormEvent) => {
   const newEvent: Event = {
     ...formData as Event,
     id: Math.random().toString(36).slice(2, 11),
-    organizerId: 'current-user',
+   
     organizerName: userName || 'Event Organizer',
     registrationCount: 0,
     status: 'upcoming',
@@ -108,16 +108,34 @@ const handlePublish = async (e?: FormEvent) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        updateFormData('image', reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "z0yqqaca"); // ✅ YOUR preset
+
+  try {
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dzzbcjxkv/image/upload", // 🔥 replace this
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const data = await res.json();
+
+    console.log("Cloudinary response:", data); // 👈 check this
+
+    // ✅ save image URL
+    updateFormData("image", data.secure_url);
+
+  } catch (err) {
+    console.error("Image upload failed", err);
+  }
+};
 
   const triggerFileInput = () => {
     fileInputRef.current?.click();
@@ -161,22 +179,7 @@ const handlePublish = async (e?: FormEvent) => {
             >
               Save Draft
             </button>
-            {/* {currentStep === 4 ? (
-              <button 
-                onClick={handlePublish}
-                className="px-8 py-2 rounded-full bg-linear-to-r from-[#adc6ff] to-primary-container text-on-primary font-bold shadow-lg shadow-primary-container/20 hover:brightness-110 transition-all"
-              >
-                Publish Event
-              </button>
-            ) : (
-              <button 
-                onClick={handleNext}
-                className="px-8 py-2 rounded-full bg-white/10 text-white font-bold hover:bg-white/20 transition-all flex items-center gap-2"
-              >
-                Next Step
-                <ArrowRight size={18} />
-              </button>
-            )} */}
+            
           </div>
         </div>
       </header>
