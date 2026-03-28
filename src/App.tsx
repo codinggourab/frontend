@@ -961,14 +961,14 @@ useEffect(() => {
                 <img 
                   alt="Campus Event" 
                   className="w-full h-125 object-cover transition-transform duration-700 group-hover:scale-110"
-                  src="https://d17thj9kqp1mkn.cloudfront.net/strapi-assets-tech_a34b41e7f9.jpg"
+                  src="https://res.cloudinary.com/dzzbcjxkv/image/upload/v1774628830/dodchtdiygmpkeyd6gxw.png"
                 />
                 <div className="absolute bottom-6 left-6 right-6 p-6 glass-morphism rounded-xl border border-white/10">
                   <div className="flex items-center justify-between mb-4">
                     <span className="px-3 py-1 rounded-full bg-[#adc6ff]/20 text-[#adc6ff] text-xs font-bold uppercase tracking-wider">Featured Event</span>
-                    <span className="text-on-surface-variant text-sm">Starts within 7 days</span>
+                    <span className="text-on-surface-variant text-sm">Starts within 2 days</span>
                   </div>
-                  <h3 className="text-xl font-headline font-bold mb-1 text-white">Android Development Workshop </h3>
+                  <h3 className="text-xl font-headline font-bold mb-1 text-white">IOT WORKSHOP </h3>
                   <p className="text-on-surface-variant text-sm flex items-center gap-2">
                     <MapPin className="text-[#adc6ff]" size={16} />
                     MCA, BPPIMT
