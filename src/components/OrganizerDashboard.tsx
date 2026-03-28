@@ -470,7 +470,7 @@ const handleDelete = async (eventId: string) => {
                             >
                               <Download size={18} />
                             </button>
-                            {event.organizerId === currentUserId && (
+                            
   <button
     onClick={(e) => {
       e.stopPropagation();
@@ -481,7 +481,7 @@ const handleDelete = async (eventId: string) => {
   >
     <Trash2 size={18} />
   </button>
-)}
+
                           </div>
                         </div>
                       </div>
