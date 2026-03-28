@@ -961,7 +961,7 @@ useEffect(() => {
                 <img 
                   alt="Campus Event" 
                   className="w-full h-125 object-cover transition-transform duration-700 group-hover:scale-110"
-                  src="https://res.cloudinary.com/dzzbcjxkv/image/upload/v1774628830/dodchtdiygmpkeyd6gxw.png"
+                  src="https://res.cloudinary.com/dzzbcjxkv/image/upload/v1774714734/WORKSHOP_wkv6hn.jpg"
                 />
                 <div className="absolute bottom-6 left-6 right-6 p-6 glass-morphism rounded-xl border border-white/10">
                   <div className="flex items-center justify-between mb-4">
